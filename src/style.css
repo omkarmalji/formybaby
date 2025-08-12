@@ -1,0 +1,156 @@
+/* ========== theme ========== */
+:root {
+  --fg: #e8e8ea;
+  --muted: #9a9aa3;
+  --accent: #7c5cff;
+}
+
+/* ========== base ========== */
+* { box-sizing: border-box; }
+
+html, body, #root { height: 100%; }
+
+html, body, #root, .app, .main {
+  background: transparent !important;
+}
+
+body {
+  margin: 0;
+  color: var(--fg);
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+  overflow: hidden;                 /* hard lock scrolling */
+}
+
+/* ========== layout ========== */
+.app {
+  min-height: 100%;
+  display: grid;
+  grid-template-rows: 1fr;
+}
+
+.main {
+  display: grid;
+  place-items: center;
+  padding: 16px;
+}
+
+/* ========== video background ========== */
+.video-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  background: #0b0b10; /* safety */
+}
+
+.bgv {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  will-change: opacity;
+  transition: opacity 800ms ease;
+  opacity: 0;
+}
+
+.bgv.on { opacity: 1; z-index: 1; }
+.bgv.off { opacity: 0; z-index: 0; }
+
+.video-vignette {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(120% 120% at 50% 50%, rgba(0,0,0,0) 40%, rgba(0,0,0,.25) 100%);
+  z-index: 2;
+}
+
+/* ========== book container ========== */
+#flip-root {
+  width: min(100%, 1274px);
+  height: 832px;
+  position: relative;
+  overflow: visible;
+  background: transparent !important;
+  border: 0 !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  filter:
+    drop-shadow(0 30px 60px rgba(0,0,0,.38))
+    drop-shadow(0 10px 28px rgba(0,0,0,.22));
+}
+
+/* remove any added seams */
+#flip-root::before, #flip-root::after { content: none !important; display: none !important; }
+
+/* PageFlip internals: hide crease/shadows & avoid gutters */
+#flip-root .stf__item { position: relative; z-index: 0; }
+#flip-root .stf__item--left  { margin-right: -3px !important; }
+#flip-root .stf__item--right { margin-left: -3px !important; }
+
+#flip-root .stf__shadow,
+#flip-root .stf__hardShadow,
+#flip-root .stf__page::before,
+#flip-root .stf__page::after {
+  display: none !important;
+}
+
+#flip-root .stf__page {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+#flip-root img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* ========== loading ========== */
+.page-placeholder {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+/* ========== controls ========== */
+.controls {
+  position: fixed;
+  left: 50%;
+  bottom: 20px;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 8px 12px;
+  background: rgba(0,0,0,.32);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255,255,255,.10);
+  border-radius: 999px;
+  z-index: 20;
+}
+
+.controls button {
+  background: rgba(255,255,255,.06);
+  color: var(--fg);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 999px;
+  padding: 6px 10px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.controls button:hover { border-color: var(--accent); }
+
+/* ========== responsive ========== */
+@media (max-width: 640px) {
+  #flip-root { height: 80vh; }
+}
